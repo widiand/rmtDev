@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { jobItem, jobItemExpanded } from "./types";
 import { BASE_API_URL } from "./constants";
 import { useQuery } from "@tanstack/react-query";
-import toast from "react-hot-toast";
+import { handleError } from "./utils";
 
 type JobItemApiResponse = {
 	public: boolean;
@@ -28,9 +28,7 @@ export const useJobItem = (id: number | null) => {
 			refetchOnWindowFocus: false,
 			retry: false,
 			enabled: Boolean(id),
-			onError: (error) => {
-				toast.error(error.message);
-			},
+			onError: handleError,
 		}
 	);
 
@@ -39,27 +37,6 @@ export const useJobItem = (id: number | null) => {
 		isLoading: isInitialLoading,
 	} as const;
 };
-
-// export const useJobItems = (searchText: string) => {
-// 	const [jobItems, setJobItems] = useState<jobItem[]>([]);
-// 	const [isLoading, setIsLoading] = useState(false);
-
-// 	useEffect(() => {
-// 		if (!searchText) return;
-
-// 		const fetchData = async () => {
-// 			setIsLoading(true);
-// 			const response = await fetch(`${BASE_API_URL}?search=${searchText}`);
-// 			const data = await response.json();
-// 			setIsLoading(false);
-// 			setJobItems(data.jobItems);
-// 		};
-
-// 		fetchData();
-// 	}, [searchText]);
-
-// 	return { jobItems, isLoading } as const;
-// };
 
 type JobItemsApiResponse = {
 	public: boolean;
@@ -88,9 +65,7 @@ export const useJobItems = (searchText: string) => {
 			refetchOnWindowFocus: false,
 			retry: false,
 			enabled: Boolean(searchText),
-			onError: (error) => {
-				toast.error(error.message);
-			},
+			onError: handleError,
 		}
 	);
 
